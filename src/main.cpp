@@ -20,7 +20,6 @@ Database chooseOpenDatabase() {
 			std::cin.get();
 		}
 	}
-
 	return db;
 }
 
@@ -39,7 +38,6 @@ int main() {
 			case '1' : {
 				// OPEN A NEW DATABASE
 				Database db = chooseOpenDatabase();
-				// std::vector<Student> students = db.getStudents();
 				while (true) {
 					int studentCounter = 1;
 					for ( Student student : db.getStudents() ) {
@@ -58,7 +56,9 @@ int main() {
 
 					// VALID OPTION 
 					Student choosedStudent = db.getStudents()[studentOptionInput - 1];
-					std::cout << "STUDENT : " << choosedStudent.getName() << std::endl;
+					db.setCurrentStudent(&choosedStudent);
+					db.sayCurrentStudentName();
+					std::cin.get();
 					std::cin.get();
 				}
 				break;

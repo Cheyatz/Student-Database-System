@@ -4,10 +4,21 @@
 std::string const CONFIG_FILE_NAME = "config.cfg";
 std::string const DATABASE_FOLDER = "db";
 
-Database::Database() { }
+Database::Database() {
+	m_currentStudent = nullptr;
+}
+
+// DEBUG METHODS
+void Database::sayCurrentStudentName() {
+	std::cout << m_currentStudent->getName() << std::endl;
+}
 
 // GETTERS
 std::vector<Student> Database::getStudents() { return m_students; }
+Student* Database::getCurrentStudent() const { return m_currentStudent; }
+
+// SETTERS
+void Database::setCurrentStudent(Student* const p_student) { m_currentStudent = p_student; }
 
 bool Database::openDatabase(std::string p_db) {
 	try {
@@ -47,10 +58,20 @@ bool Database::openDatabase(std::string p_db) {
 			std::string const stdName = studentProps["name"];
 			std::string const stdfName = studentProps["father_name"];
 			std::string const stdmName = studentProps["mother_name"];
+			std::string const unParsedStdmMarks = studentProps["marks"]; // In the form of n,n,n,n,n
 			char const stdGrade = studentProps["grade"][0];
 			int const stdAge = std::atoi((studentProps["age"]).c_str());
 
-			Student student(stdName , stdfName , stdmName , stdGrade , stdAge);
+			// Parsing marks value into a vector
+			std::vector<std::string> parsedString_stdmMarks = Parser::parseCSV(unParsedStdmMarks);
+			std::vector<int> stdmMarks;
+			for ( auto markInStr : parsedString_stdmMarks ) {
+				stdmMarks.push_back(std::atoi(markInStr.c_str()));
+				std::cout << std::atoi(markInStr.c_str()) << std::endl;
+			}
+			// Parsing marks value into a vector
+
+			Student student(stdName , stdfName , stdmName , stdGrade , stdAge , stdmMarks);
 			m_students.push_back(student);
 		}
 
